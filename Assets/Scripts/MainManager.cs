@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.IO;
 
 public class MainManager : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class MainManager : MonoBehaviour
 
     public Text ScoreText;
     public Text BestScoreText;
+    private string currentUserName;
+    private string top_username = "NA";
+    private int top_score = 0;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -38,7 +42,15 @@ public class MainManager : MonoBehaviour
             }
         }
 
-        BestScoreText.text = $"Best Score: {UserNameManager.UserNameInstance.username} : 0";
+        if (UserNameManager.UserNameInstance.username != null && UserNameManager.UserNameInstance.username != "")
+        {
+            currentUserName = UserNameManager.UserNameInstance.username;
+        } else {
+            currentUserName = "NA";
+        }
+
+        LoadColor();
+        BestScoreText.text = $"Best Score: {top_username} : {top_score}";
     }
 
     private void Update()
@@ -68,12 +80,55 @@ public class MainManager : MonoBehaviour
     void AddPoint(int point)
     {
         m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
+        ScoreText.text = $"{currentUserName} Score : {m_Points}";
     }
 
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        if (m_Points > top_score || top_score == 0)
+        {
+            SaveScore();
+        }
     }
+
+    [System.Serializable]
+    class SaveData
+    {
+        public string username;
+        public int high_score;
+    }
+
+    public void SaveScore()
+    {
+        SaveData data = new SaveData();
+
+        // There can be cases where user didn't put in a name
+        if (UserNameManager.UserNameInstance.username != null && UserNameManager.UserNameInstance.username != "")
+        {
+            data.username = UserNameManager.UserNameInstance.username;
+        } else {
+            data.username = "NA";
+        }
+
+        data.high_score = m_Points;
+
+        string json = JsonUtility.ToJson(data);
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+    }
+
+    public void LoadColor()
+     {
+        string path = Application.persistentDataPath + "/savefile.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+            top_score = data.high_score;
+            top_username = data.username;
+        }
+     }
+
 }

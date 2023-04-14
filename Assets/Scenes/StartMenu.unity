@@ -302,6 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90b27a5a5baeb404ab693942fd6e8d12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  username: 
 --- !u!1 &475594936
 GameObject:
   m_ObjectHideFlags: 0
@@ -1133,7 +1134,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1789203426}
+        m_TargetAssemblyTypeName: StartMenuHandler, Assembly-CSharp
+        m_MethodName: GetUserName
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -1324,6 +1337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f62724eaa99a84dc6a1e121e063219cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userNameInput: {fileID: 1529739131}
 --- !u!1 &1801224195
 GameObject:
   m_ObjectHideFlags: 0
